@@ -53,9 +53,9 @@ void fg_handler();
 void jobs_handler();
 void add_to_job_control(Job *newJob);
 void completed_jobs_handler();
-pid_t getNextJobNumber();
+pid_t get_next_job_number();
 void new_job_handler(char *inputString);
-bool invalidInput(char *a);
+bool invalid_input(char *a);
 void wait_job_finish(Job *newJob, bool isNewJob);
 void execute_job_no_pipe(Job *newJob);
 void execute_job_with_pipe(Job *newJob);
@@ -223,7 +223,7 @@ void jobs_handler() {
 }
 
 void add_to_job_control(Job *newJob) {
-	newJob->jid = getNextJobNumber();
+	newJob->jid = get_next_job_number();
 
 	if (headJob == NULL) {
 		headJob = newJob;
@@ -468,14 +468,14 @@ int main(int argc, char *argv[]) {
 			jobs_handler();
 		}
 
-		else if (!invalidInput(userInput)) {
+		else if (!invalid_input(userInput)) {
 			new_job_handler(userInput);
 		}
 	}
 }
 
 
-pid_t getNextJobNumber() {
+pid_t get_next_job_number() {
 	if (headJob == NULL) {
 		return 1;
 	}
@@ -493,7 +493,7 @@ pid_t getNextJobNumber() {
 }
 
 
-bool invalidInput(char *a) {
+bool invalid_input(char *a) {
 
 	return (a[0] == '|') || (a[0] == '<') || (a[0] == '>') || (a[0] == '&'); 
 }
