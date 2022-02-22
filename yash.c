@@ -260,10 +260,10 @@ void wait_job_finish(Job *runningJob, bool isNewJob) {
 
 	int count = 0;
 	bool matchesPid = false;
-	bool wasStopped = false;
 
-	while (count < runningJob->numProcesses) {
+	while(!strcmp(runningJob->state, RUNNING)) {
 		w = waitpid(-1, &wstatus, WUNTRACED|WCONTINUED);
+
 		if (w == -1) {
     	  perror("waitpid");
     	  exit(EXIT_FAILURE);
@@ -279,23 +279,20 @@ void wait_job_finish(Job *runningJob, bool isNewJob) {
 
     	if (matchesPid) {
     		if (WIFSIGNALED(wstatus)) {
-    			count = runningJob->numProcesses;
+    			runningJob->state = DONE;
     		}
     		else if (WIFEXITED(wstatus)) {
     			count ++;
+    			if (count == runningJob->numProcesses) {
+					runningJob->state = DONE;
+    			}
 	    	} else if (WIFSTOPPED(wstatus)) {
-	    		count = runningJob->numProcesses;
-	    		wasStopped = true;
     			runningJob->state = STOPPED;
 				if (isNewJob) {
 					add_to_job_control(runningJob);
 				}
     		}
-    	} 
-	}
-
-	if (!wasStopped) {
-		runningJob->state = DONE;
+    	}
 	}
 
 	signal(SIGINT, SIG_IGN);
