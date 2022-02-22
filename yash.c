@@ -321,7 +321,7 @@ void run_process(Process *currProcess, bool forPipedJob, bool leftProcess, pid_t
 	if (strlen(currProcess->inputFilePath) > 0) {
 		int ifd = open(currProcess->inputFilePath, O_RDONLY);
 		if (ifd < 0) {
-			perror(currProcess->command[0]);
+			perror("error with input file");
 	  		exit(EXIT_FAILURE);
 		}
 		dup2(ifd, STDIN_FILENO);
@@ -330,7 +330,7 @@ void run_process(Process *currProcess, bool forPipedJob, bool leftProcess, pid_t
 	if(strlen(currProcess->outputFilePath) > 0) {
 		int ofd = open(currProcess->outputFilePath, O_CREAT|O_WRONLY|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IWGRP|S_IROTH);
 		if (ofd < 0) {
-			perror(currProcess->command[0]);
+			perror("error with output file");
 			exit(EXIT_FAILURE);	
 		}
 		dup2(ofd, STDOUT_FILENO);

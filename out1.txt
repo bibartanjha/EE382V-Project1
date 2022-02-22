@@ -1,0 +1,5 @@
+EE382V-Project1.pdf
+Makefile
+output.txt
+yash
+yash.c
