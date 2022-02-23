@@ -69,15 +69,13 @@ static void sig_int_default(int signo) {
 }
 
 static void sig_tstp_default(int signo) {
-	printf("\n");
+	printf("\n# ");
 }
 
 static void sig_int(int signo) {
-	printf("\n");
   kill(-pid_ch1,SIGINT);
 }
 static void sig_tstp(int signo) {
-	printf("\n");
   kill(-pid_ch1,SIGTSTP);
 }
 
