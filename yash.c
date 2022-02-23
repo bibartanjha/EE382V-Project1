@@ -117,7 +117,7 @@ void kill_all_jobs() {
 
 void initialize() {
 	signal(SIGINT, sig_int_default);
-	signal(SIGTSTP, sig_stp_default);
+	signal(SIGTSTP, sig_tstp_default);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGCHLD, sig_chld);
