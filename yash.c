@@ -65,7 +65,7 @@ void run_process(Process *currProcess, bool forPipedJob, bool leftProcess, pid_t
 
 
 static void sig_int_default(int signo) {
-	printf("\n");
+	printf("\n# ");
 }
 
 static void sig_tstp_default(int signo) {
