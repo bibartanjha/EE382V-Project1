@@ -43,6 +43,8 @@ pid_t shell_process_group;
 int pipefd[2];
 pid_t pid_ch1, pid_ch2;
 
+static void sig_int_default(int signo);
+static void sig_tstp_default(int signo);
 static void sig_int(int signo);
 static void sig_tstp(int signo);
 static void sig_chld(int signo);
@@ -62,11 +64,20 @@ void execute_job_with_pipe(Job *newJob);
 void run_process(Process *currProcess, bool forPipedJob, bool leftProcess, pid_t newPid);
 
 
+static void sig_int_default(int signo) {
+	printf("\n");
+}
+
+static void sig_tstp_default(int signo) {
+	printf("\n");
+}
 
 static void sig_int(int signo) {
+	printf("\n");
   kill(-pid_ch1,SIGINT);
 }
 static void sig_tstp(int signo) {
+	printf("\n");
   kill(-pid_ch1,SIGTSTP);
 }
 
@@ -105,8 +116,8 @@ void kill_all_jobs() {
 
 
 void initialize() {
-	signal(SIGINT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
+	signal(SIGINT, sig_int_default);
+	signal(SIGTSTP, sig_stp_default);
 	signal(SIGTTIN, SIG_IGN);
 	signal(SIGTTOU, SIG_IGN);
 	signal(SIGCHLD, sig_chld);
@@ -295,8 +306,8 @@ void wait_job_finish(Job *runningJob, bool isNewJob) {
     	}
 	}
 
-	signal(SIGINT, SIG_IGN);
-	signal(SIGTSTP, SIG_IGN);
+	signal(SIGINT, sig_int_default);
+	signal(SIGTSTP, sig_tstp_default);
 	tcsetpgrp(shell_terminal, shell_process_group); //assigning fg to shell again
 }
 
